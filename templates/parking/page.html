@@ -1,78 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
-  <title>Bootstrap Theme Company Page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <style>
-  .container-fluid {
-    padding: 60px 50px;
-  }
-  .logo {
-    font-size: 200px;
-  }
-  @media screen and (max-width: 768px) {
-    .col-sm-4 {
-      text-align: center;
-      margin: 25px 0;
-    }
-  }
+{% extends 'parking/base.html' %}
 
-  @media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-      font-size: 3.5rem;
-    }
-  }
-  .bg-4 {
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-    .my-custom-scrollbar {
-    position: relative;
-    height: 300px;
-    overflow: auto;
-    }
-    .table-wrapper-scroll-y {
-    display: block;
-    }
-  .profile {
-     font-size: 15px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-    .table-row{
-     cursor:pointer;
-    }
-
-  .map{
-      height: 300px;
-  }
-  p {font-size: 16px;}
-  </style>
-
-  <script>
-      $(document).ready(function($) {
-        $(".table-row").click(function() {
-            window.document.location = $(this).data("href");
-        });
-      });
-
-  </script>
+{% block header %}
+    <title>MainMapView</title>
 
     <script>
         function myMap() {
@@ -94,8 +23,12 @@
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key='apiKey'&callback=myMap">
     </script>
-</head>
-<body>
+
+    <title>MapView</title>
+{% endblock %}
+
+
+{% block content %}
 
 <!-- Navbar -->
 <nav class="navbar navbar-default">
@@ -203,5 +136,4 @@
   <p>Bootstrap Theme iWeb project</p>
 </footer>
 
-</body>
-</html>
+{% endblock %}
