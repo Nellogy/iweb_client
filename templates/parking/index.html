@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'parking/base.html' %}
+{% block header %}
     <meta charset="UTF-8">
     <title>MainMapView</title>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div>
-        {% if data %}
             <ul>
-                {% for parking in data %}
-                    <li>{{parking}}</li>
-                {% endfor %}
+                <li>{{ weather }}</li>
+                <li>{{ temperature }}</li>
+                <li>{{ humidity }}</li>
             </ul>
-        {% endif %}
     </div>
-</body>
-</html>
+{% endblock %}
