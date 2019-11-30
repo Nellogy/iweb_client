@@ -2,13 +2,36 @@ import requests
 from django.shortcuts import render
 
 weatherURL = 'https://api.openweathermap.org/data/2.5/weather?id=2514256&appid=a616b07331d06ea639f3b99c87ef5830&units=metric&lang=es'
-
+apiURL = 'http://127.0.0.1:5000/api/v1/'
 
 def index(request):
-    response = requests.get(weatherURL)
-    data = response.json()
-    context = {'weather': data['weather'][0]['description'],
-               'temperature': str(data['main']['temp']) + 'ºC',
-               'humidity': str(data['main']['humidity']) + '%',
+    weatherResponse = requests.get(weatherURL)
+    weatherData = weatherResponse.json()
+
+    parkingsResponse = requests.get(apiURL + 'openData/parkings')
+    parkingsData = parkingsResponse.json()
+
+    i = 1
+    parkingList = []
+    for item in parkingsData:
+        aux = ''
+        info = item['availableSpotNumber']['value']
+
+        if info == str(-1):
+            aux = 'N/A'
+        else:
+            aux = info
+
+        parkingList.append({'id': i,
+                            'parking': item['name']['value'],
+                            'available': aux,
+                            'address': item['description']['value'],
+                            })
+        i += 1
+
+    context = {'weather': weatherData['weather'][0]['description'],
+               'temperature': str(weatherData['main']['temp']) + 'ºC',
+               'humidity': str(weatherData['main']['humidity']) + '%',
+               'parkingList': parkingList,
                }
     return render(request, 'parking/page.html', context)

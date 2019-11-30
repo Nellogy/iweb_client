@@ -147,67 +147,18 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">1</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">2</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">3</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">4</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">5</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">1</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">6</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">7</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">8</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-                <tr class="table-row"data-href="#">
-                  <th scope="row">9</th>
-                  <td>El palo</td>
-                  <td>1km</td>
-                  <td>Calle el palo, 23</td>
-                </tr>
-
+                {% for item in parkingList %}
+                    <tr class="table-row" data-href="#">
+                    {% for key, value in item.items %}
+                        {% if key == 'id' %}
+                            <th scope="row">{{ value }}</th>
+                        {% endif %}
+                        {% if key != 'id' %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
               </tbody>
             </table>
         </div>
