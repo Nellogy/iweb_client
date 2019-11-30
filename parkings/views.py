@@ -11,6 +11,10 @@ def index(request):
     parkingsResponse = requests.get(apiURL + 'openData/parkings')
     parkingsData = parkingsResponse.json()
 
+    coordinatesResponse = request.get(apiURL + 'openData/locations')
+    coordinatesData = coordinatesResponse.json()
+    #parking for
+    
     i = 1
     parkingList = []
     for item in parkingsData:
