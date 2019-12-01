@@ -60,6 +60,8 @@
         </div>
     </nav>
 
+    <!-- 1st container -->
+
     <div class="container-fluid text-center">
         <div class="row">
 
@@ -124,22 +126,23 @@
     </div>
 
     <!-- 2nd Container-->
+
     <div class="container-fluid text-center">
         <div class="row">
             <div class="col-sm-4">
                 <span class="glyphicon glyphicon-home"></span>
                 <h4>Registered Parkings</h4>
-                <p>14</p>
+                <p>{{ i }}</p>
             </div>
             <div class="col-sm-4">
                 <span class="glyphicon glyphicon-lock"></span>
                 <h4>Available Spots</h4>
-                <p>234</p>
+                <p>{{ availableSpots }}</p>
             </div>
             <div class="col-sm-4">
                 <span class="glyphicon glyphicon-lock"></span>
                 <h4>Total spots</h4>
-                <p>1845</p>
+                <p>{{ totalSpots }}</p>
             </div>
         </div>
         <br><br>
@@ -147,6 +150,7 @@
     </div>
 
     <!-- Footer -->
+
     <footer class="container-fluid bg-4 text-center">
         <p>Bootstrap Theme iWeb project</p>
     </footer>
