@@ -1,3 +1,5 @@
+import json
+
 import requests
 from django.shortcuts import render
 
@@ -10,6 +12,9 @@ def index(request):
 
     parkingsResponse = requests.get(apiURL + 'openData/parkings')
     parkingsData = parkingsResponse.json()
+
+    locationsResponse = requests.get(apiURL + 'openData/locations')
+    locationsData = json.dumps(locationsResponse.json()['features'])
 
     i = 1
     availableSpots = 0
@@ -43,6 +48,7 @@ def index(request):
                'temperature': str(weatherData['main']['temp']) + 'ºC',
                'humidity': str(weatherData['main']['humidity']) + '%',
                'parkingList': parkingList,
+               'locationsData': locationsData,
                'counter': i - 1,
                'totalSpots': totalSpots,
                'availableSpots': availableSpots,

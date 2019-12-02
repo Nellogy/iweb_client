@@ -17,6 +17,19 @@
             };
 
             let map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            let locationsData = {{ locationsData|safe }};
+
+            for(let i = 0; i < Object.keys(locationsData).length; i++){
+                if(locationsData[i].geometry.coordinates[1] != 0){
+                    let parking =  {lat:locationsData[i].geometry.coordinates[1],
+                                    lng:locationsData[i].geometry.coordinates[0]};
+                    let marker = new google.maps.Marker({
+                        position: parking,
+                        map: map,
+                        title: locationsData[i].properties.name});
+                    marker.setMap(map);
+                }
+            }
         }
     </script>
 
