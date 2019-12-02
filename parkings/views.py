@@ -12,7 +12,10 @@ def index(request):
     parkingsData = parkingsResponse.json()
 
     i = 1
+    availableSpots = 0
+    totalSpots = 0
     parkingList = []
+
     for item in parkingsData:
         aux = ''
         info = item['availableSpotNumber']['value']
@@ -27,11 +30,22 @@ def index(request):
                             'available': aux,
                             'address': item['description']['value'],
                             })
+
+        if item['availableSpotNumber']['value'] is not None and item['availableSpotNumber']['value'] != '-1':
+            availableSpots += int(item['availableSpotNumber']['value'])
+
+        if item['totalSpotNumber']['value'] != 'None' and item['totalSpotNumber']['value'] != '-1':
+            totalSpots += int(item['totalSpotNumber']['value'])
+
         i += 1
 
     context = {'weather': weatherData['weather'][0]['description'],
                'temperature': str(weatherData['main']['temp']) + 'ºC',
                'humidity': str(weatherData['main']['humidity']) + '%',
                'parkingList': parkingList,
+               'i': i - 1,
+               'totalSpots': totalSpots,
+               'availableSpots': availableSpots,
                }
+
     return render(request, 'parking/page.html', context)
