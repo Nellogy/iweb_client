@@ -4,6 +4,7 @@ from django.shortcuts import render
 weatherURL = 'https://api.openweathermap.org/data/2.5/weather?id=2514256&appid=a616b07331d06ea639f3b99c87ef5830&units=metric&lang=es'
 apiURL = 'http://127.0.0.1:5000/local/v1/'
 
+
 def index(request):
     weatherResponse = requests.get(weatherURL)
     weatherData = weatherResponse.json()
@@ -39,13 +40,21 @@ def index(request):
 
         i += 1
 
-    context = {'weather': weatherData['weather'][0]['description'],
-               'temperature': str(weatherData['main']['temp']) + 'ºC',
-               'humidity': str(weatherData['main']['humidity']) + '%',
-               'parkingList': parkingList,
-               'i': i - 1,
-               'totalSpots': totalSpots,
-               'availableSpots': availableSpots,
+    context = {
+                'weather': weatherData['weather'][0]['description'],
+                'temperature': str(weatherData['main']['temp']) + 'ºC',
+                'humidity': str(weatherData['main']['humidity']) + '%',
+                'parkingList': parkingList,
+                'counter': i - 1,
+                'totalSpots': totalSpots,
+                'availableSpots': availableSpots,
                }
 
     return render(request, 'parking/page.html', context)
+
+
+def details(request, idParking):
+    context = {
+                'id': idParking,
+               }
+    return render(request, 'parking/parkingDetails.html', context)
