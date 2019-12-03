@@ -2,7 +2,7 @@ import requests
 from django.shortcuts import render
 
 weatherURL = 'https://api.openweathermap.org/data/2.5/weather?id=2514256&appid=a616b07331d06ea639f3b99c87ef5830&units=metric&lang=es'
-apiURL = 'http://127.0.0.1:5000/local/v1/'
+apiURL = 'http://127.0.0.1:5000/api/v1/'
 
 
 def index(request):
