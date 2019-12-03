@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from iweb_client import views
 
 urlpatterns = [
+    path('', views.homepage, name="homepage"),
     path('parkings/', include('parkings.urls')),
     path('admin/', admin.site.urls),
 ]
