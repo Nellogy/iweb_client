@@ -48,10 +48,17 @@ def index(request):
                'temperature': str(weatherData['main']['temp']) + 'ºC',
                'humidity': str(weatherData['main']['humidity']) + '%',
                'parkingList': parkingList,
-               'locationsData': locationsData,
                'counter': i - 1,
                'totalSpots': totalSpots,
                'availableSpots': availableSpots,
+               'locationsData': locationsData,
                }
 
     return render(request, 'parking/page.html', context)
+
+
+def details(request, idParking):
+    context = {
+                'id': idParking,
+               }
+    return render(request, 'parking/parkingDetails.html', context)
