@@ -45,7 +45,6 @@ def index(request):
 
         i += 1
 
-
     context = {
                'weather': weatherData['weather'][0]['description'],
                'temperature': str(weatherData['main']['temp']) + 'ºC',
@@ -62,6 +61,6 @@ def index(request):
 
 def details(request, idParking):
     context = {
-                'id': idParking,
-               }
+        'id': idParking,
+    }
     return render(request, 'parking/parkingDetails.html', context)
