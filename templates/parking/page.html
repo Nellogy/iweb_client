@@ -3,7 +3,7 @@
 {% block header %}
     <title>MainMapView</title>
 
-    <script>
+    <script type="text/javascript">
         // We create and initialize the map
         function myMap() {
             let mapProp = {
@@ -16,7 +16,8 @@
                 fullscreenControl: false,
                 zoom: 14,
             };
-            let map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            window.map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            //let map to do it local
 
 
             // We geolocate the user
@@ -62,10 +63,80 @@
                 }
             }
         }
+
+        function route(id) {
+            //we can create a new map to erase the markers
+            /*
+            let mapProp = {
+                center: new google.maps.LatLng(36.719101, -4.420083),
+                zoomControl: true,
+                mapTypeControl: false,
+                scaleControl: false,
+                streetViewControl: false,
+                rotateControl: false,
+                fullscreenControl: false,
+                zoom: 14,
+            };
+            let map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+             */
+            navigator.geolocation.getCurrentPosition(
+                function getLatLon(position){
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+
+                    let userLocation = {
+                       'lat': latitude,
+                       'lng': longitude,
+                     };
+
+                    let locationsData = {{ locationsData|safe }};
+                    let parking = {
+                        lat: locationsData[id-1].geometry.coordinates[1],
+                        lng: locationsData[id-1].geometry.coordinates[0],
+                    };
+
+                    //routing to the parking
+                    let directionsService = new google.maps.DirectionsService();
+                    let directionsRequest = {
+                        origin: userLocation,
+                        destination: parking,
+                        travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                        unitSystem: google.maps.UnitSystem.Metric
+                    };
+
+                    directionsService.route(
+                        directionsRequest, function(response, status){
+                            if(status === google.maps.DirectionsStatus.OK){
+                                new google.maps.DirectionsRenderer({
+                                    map: map,
+                                    directions: response
+                                });
+                                changeScript(userLocation.lat, userLocation.lng, parking.lat, parking.lng);
+
+                            }else{
+                                $("#error").append("Unable to retrieve your route<br />");
+                            }
+                        }
+                    );
+                }, function error(msg){
+                    alert('Geolocation is not enabled');
+
+                }, {timeout: 10000, enableHighAccuracy: true});
+        }
+
+         function changeScript(originLat, originLng, destinationLat, destinationLng) {
+            document.getElementById("apikey").src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBmSgcdFBstr0iulZUzGm8AfTnIjVGSFEQ&origin=" + originLat + "," + originLng +
+                                                    "&destination=" + destinationLat + "," + destinationLng + "&callback=route";
+        }
     </script>
 
     <script id="apikey" async defer
-            src="https://maps.googleapis.com/maps/api/js?key='API_KEY'&callback=myMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmSgcdFBstr0iulZUzGm8AfTnIjVGSFEQ&callback=myMap">
+    </script>
+
+    <script type="text/javascript">
+
     </script>
 
     <title>MapView</title>
@@ -131,7 +202,7 @@
                                     {% endif %}
                                 {% endfor %}
                             </tr>
-                            <th><input type="button" value="Route" onclick="route('{{ item.id }}')"></th>
+                            <th><input type="button" value="Route" onclick="route( {{ item.id }} )"></th>
                         {% endfor %}
                         </tbody>
                     </table>
@@ -163,95 +234,5 @@
         <br><br>
 
     </div>
-
-
-    <script>
-        function route(id) {
-            let mapProp = {
-                center: new google.maps.LatLng(36.719101, -4.420083),
-                zoomControl: true,
-                mapTypeControl: false,
-                scaleControl: false,
-                streetViewControl: false,
-                rotateControl: false,
-                fullscreenControl: false,
-                zoom: 14,
-            };
-            let map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
-            // We geolocate the user
-            navigator.geolocation.getCurrentPosition(
-                function getLatLon(position){
-                    let latitude = position.coords.latitude;
-                    let longitude = position.coords.longitude;
-
-                    //here we'll move the map to the user location
-                    map.panTo(new google.maps.LatLng(latitude, longitude));
-
-                    let userLocation = {
-                        'lat': latitude,
-                        'lng': longitude,
-                    };
-
-                    // after locating the user we can put a marker on his position
-                    let userMark = new google.maps.Marker({
-                        position: userLocation,
-                        map: map,
-                        title: 'you are here',
-                    });
-                    userMark.setMap(map);
-
-                    //-----------------------------------------------------------
-
-                    // we finally can add a marker for each parking
-                    let locationsData = {{ locationsData|safe }};
-                    let parking;
-
-                    for(let i = 0; i < Object.keys(locationsData).length; i++){
-                        if(locationsData[i].geometry.coordinates[1] !== 0){
-                            parking =  {lat:locationsData[i].geometry.coordinates[1],
-                                            lng:locationsData[i].geometry.coordinates[0]};
-                        }
-                    }
-
-                    let directionsService = new google.maps.DirectionsService();
-                    let directionsRequest = {
-                        origin: userLocation,
-                        destination: parking,
-                        travelMode: google.maps.DirectionsTravelMode.WALKING,
-                        unitSystem: google.maps.UnitSystem.Metric
-                    }
-
-                    directionsService.route(
-                        directionsRequest, function(response, status){
-                            if(status == google.maps.DirectionsStatus.OK){
-                                new google.maps.DirectionsRenderer({
-                                    map: map,
-                                    directions: response
-                                });
-                                changeScript(userLocation.lat, userLocation.lng, parking.lat, parking.lng);
-                            }else{
-                                $("#error").append("Unable to retrieve your route<br />");
-                            }
-                        }
-                    );
-
-                    //----------------------------------------------------------------
-
-                }, function error(msg){
-                    alert('Geolocation is not enabled');
-
-                }, {timeout: 10000, enableHighAccuracy: true});
-
-
-        }
-
-
-        function changeScript(originLat, originLng, destinationLat, destinationLng) {
-            document.getElementById("apikey").src = "https://maps.googleapis.com/maps/api/js?key='API_KEY'&origin=" + originLat + "," + originLng +
-                                                    "&destination=" + destinationLat + "," + destinationLng + "&callback=route";
-        }
-
-    </script>
 
 {% endblock %}
