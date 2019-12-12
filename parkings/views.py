@@ -60,7 +60,13 @@ def index(request):
 
 
 def details(request, idParking):
+    weatherResponse = requests.get(weatherURL)
+    weatherData = weatherResponse.json()
+
     context = {
+        'weather': weatherData['weather'][0]['description'],
+        'temperature': str(weatherData['main']['temp']) + 'ºC',
+        'humidity': str(weatherData['main']['humidity']) + '%',
         'id': idParking,
     }
     return render(request, 'parking/parkingDetails.html', context)
