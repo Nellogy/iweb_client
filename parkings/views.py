@@ -77,5 +77,6 @@ def details(request, idParking):
         'description': parkingData['description']['value'],
         'longitude': locationData['geometry']['coordinates'][0],
         'latitude': locationData['geometry']['coordinates'][1],
+
     }
     return render(request, 'parking/parkingDetails.html', context)
