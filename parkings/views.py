@@ -26,23 +26,18 @@ def index(request):
         aux = ''
         info = item['availableSpotNumber']['value']
 
-        if info == str(-1):
+        if info == str(-1) or info is None:
             aux = 'N/A'
         else:
             aux = info
+            availableSpots += int(info)
+            totalSpots += int(item['totalSpotNumber']['value'])
 
         parkingList.append({'id': i,
                             'parking': item['name']['value'],
                             'available': aux,
                             'address': item['description']['value'],
                             })
-
-        if item['availableSpotNumber']['value'] is not None and item['availableSpotNumber']['value'] != '-1':
-            availableSpots += int(item['availableSpotNumber']['value'])
-
-        if item['totalSpotNumber']['value'] != 'None' and item['totalSpotNumber']['value'] != '-1':
-            totalSpots += int(item['totalSpotNumber']['value'])
-
         i += 1
 
     context = {
@@ -60,13 +55,24 @@ def index(request):
 
 
 def details(request, idParking):
-    weatherResponse = requests.get(weatherURL)
-    weatherData = weatherResponse.json()
+    parkingResponse = requests.get(apiURL + 'openData/parking/' + str(idParking))
+    parkingData = parkingResponse.json()
+
+    locationResponse = requests.get(apiURL + 'openData/location/' + str(idParking))
+    locationData = locationResponse.json()
 
     context = {
         'weather': weatherData['weather'][0]['description'],
         'temperature': str(weatherData['main']['temp']) + 'ºC',
         'humidity': str(weatherData['main']['humidity']) + '%',
         'id': idParking,
+        'name': parkingData['name']['value'],
+        'requiredPermit': parkingData['requiredPermit']['value'],
+        'allowedVehicleType': parkingData['allowedVehicleType']['value'],
+        'availableSpotNumber': parkingData['availableSpotNumber']['value'],
+        'totalSpotNumber': parkingData['totalSpotNumber']['value'],
+        'description': parkingData['description']['value'],
+        'longitude': locationData['geometry']['coordinates'][0],
+        'latitude': locationData['geometry']['coordinates'][1],
     }
     return render(request, 'parking/parkingDetails.html', context)
