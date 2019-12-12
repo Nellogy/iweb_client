@@ -57,7 +57,7 @@ def index(request):
 def details(request, idParking):
     weatherResponse = requests.get(weatherURL)
     weatherData = weatherResponse.json()
-
+    
     parkingResponse = requests.get(apiURL + 'openData/parking/' + str(idParking))
     parkingData = parkingResponse.json()
 
@@ -77,6 +77,5 @@ def details(request, idParking):
         'description': parkingData['description']['value'],
         'longitude': locationData['geometry']['coordinates'][0],
         'latitude': locationData['geometry']['coordinates'][1],
-
     }
     return render(request, 'parking/parkingDetails.html', context)
